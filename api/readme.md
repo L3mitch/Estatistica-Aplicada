@@ -1,0 +1,36 @@
+# Tutorial início api Flask
+
+### 1 Iniciar Virtual Environment
+
+```bash
+// Windows
+python -m venv venv
+venv\Scripts\activate
+
+Linux & macOs
+python -m venv venv
+source venv/bin/activate
+```
+
+
+### 2 Instalar pacotes
+
+```bash
+pip install -r requirements.txt
+```
+
+
+### 3 Rodar servidor web
+
+```bash
+// Para rodar na porta padrão
+flask run
+
+// Para escolher a porta http
+flask run --port 5001
+```
+
+
+## Para alterar o projeto
+
+Na pasta app o arquivo *routes.py* contém as rotas para cada endppoint necessário e a pasta *templates* deve ter os arquivos utilizados para retornar os valores para as páginas
