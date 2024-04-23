@@ -1,19 +1,48 @@
-<!doctype html>
-<html>
-    <head>
-        {% if title %}
-        <title>{{ title }} - Pesquisa com Leitura Facial</title>
-        {% else %}
-        <title>Pesquisa com Leitura Facial!</title>
-        {% endif %}
-    </head>
-    <body>
-        <h1>Olá mundo!</h1>
-        
-        <il>
-            <li><a href="/resposta_inicio">resposta_inicio</a></li>
-            <li><a href="/resposta_fim">resposta_fim</a></li>
-            <li><a href="/user">user</a></li>
-        </il>
-    </body>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Estatística Aplicada</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+  <div class="flex justify-center items-center h-screen">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
+      <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
+      <form id="formCadastro" method="post" action="/resposta_inicio" class="space-y-4">
+        <div>
+          <label for="nome" class="block mb-1">Nome</label>
+          <input type="text" id="nome" name="nome" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+        <div>
+          <label for="idade" class="block mb-1">Idade</label>
+          <input type="number" id="idade" name="idade" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+        <div>
+          <label for="email" class="block mb-1">Email</label>
+          <input type="email" id="email" name="email" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+        <div>
+          <label for="sexo" class="block mb-1">Qual o seu sexo?</label>
+          <select id="sexo" name="sexo" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="O">Outro</option>
+            <option value="N">Prefiro não informar</option>
+          </select>
+        </div>
+        <div>
+          <label for="foto1" class="block mb-1">Foto 1</label>
+          <input type="file" id="foto1" name="foto1" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+        <div>
+          <label for="foto2" class="block mb-1">Foto 2</label>
+          <input type="file" id="foto2" name="foto2" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
+      </form>
+    </div>
+  </div>
+</body>
 </html>
