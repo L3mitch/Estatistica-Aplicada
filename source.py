@@ -20,6 +20,7 @@ requisicoes = [[69, 2, "kauan_nunes", 0, 0],
 def ler_requisicoes():
     url = "http://localhost:3000/requisicoes"
     response = requests.get(url)
+    # Resposta esperada: [{"id": 1, "tipo": 0, "nome": "nome_aqui"},]
     treated_response = [response["id"], response["tipo"], response["nome"], 0, 0]
     return treated_response
 
