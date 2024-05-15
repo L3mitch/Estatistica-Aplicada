@@ -82,6 +82,38 @@ def match_face(
     del draw
     pillow_image.show()
 
+def recognize_face(
+    image_id: str,
+    model: str = "hog",
+    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
+) -> None:
+    """
+    Given an image and a name, checks if the face in the image matches the name.
+    """
+    with encodings_location.open(mode="rb") as f:
+        loaded_encodings = pickle.load(f)
+    filepath = Path("match") / f"{image_id}.jpg"
+    input_image = face_recognition.load_image_file(filepath)
+
+    input_face_locations = face_recognition.face_locations(
+        input_image, model=model
+    )
+    input_face_encodings = face_recognition.face_encodings(
+        input_image, input_face_locations
+    )
+
+    pillow_image = Image.fromarray(input_image)
+    draw = ImageDraw.Draw(pillow_image)
+
+    for unknown_encoding in zip(
+        input_face_locations, input_face_encodings
+    ):
+        name = _recognize_face(unknown_encoding, loaded_encodings)
+    os.remove(filepath)
+
+    del draw
+    pillow_image.show()
+    return name
 
 def recognize_faces(
     image_location: str,
