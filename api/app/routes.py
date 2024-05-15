@@ -1,6 +1,7 @@
 import os 
 from flask import render_template, request
 from app import app
+from detector import *
 
 import csv
 
@@ -141,3 +142,8 @@ def config_data():
     fields = ['dir_name', 'name', 'age', 'email', 'sex', 'photo_1', 'photo_2', 'q1_01', 'q1_02', 'q1_03', 'q1_04', 'q1_05', 'q1_06', 'q1_07', 'q2_02', 'q2_03', 'q2_04', 'q2_05', 'q2_07']
 
     return filename, fields
+
+def leitura_facial():
+    return{
+        
+    }
