@@ -10,6 +10,14 @@ import csv
 def index():
     return render_template('index.html', title='Home')
 
+@app.route('/resposta_inicio', methods=['GET'])
+def resposta_inicio():
+    return render_template('resposta_inicio.html', title='Home')
+
+@app.route('/leitura', methods=['GET'])
+def leitura():
+    return render_template('leitura.html', title='Leitura Facial')
+
 @app.route('/resposta_inicio', methods=['POST'])
 def salva_resposta_inicio():
     if request.method == 'POST':

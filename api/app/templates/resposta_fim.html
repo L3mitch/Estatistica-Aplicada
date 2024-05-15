@@ -68,16 +68,11 @@
     <div id="formMessage" class="hidden">
       <h1 class="text-2xl font-bold mb-8 text-center">Obrigado pela participação</h1>
 
-      <a href="?responder">Responder Novamente</a>
+      <a href="{{ url_for('resposta_fim') }}">Responder Novamente</a>
     </div>
   </div>
 
-  <style>
-
-  </style>
-
   <script>
-
   let steps = document.querySelectorAll('.step');
   let currentStep = 1;
 
