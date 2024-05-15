@@ -1,9 +1,127 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Pesquisa com Leitura Facial!</title>
-    </head>
-    <body>
-        <h1>resposta_fim</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Estatística Aplicada</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+  <div class="flex justify-center items-center h-screen">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full" id="formItem">
+      <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
+      <form id="formCadastro" method="post" action="{{ url_for('resposta_fim') }}" class="space-y-4" enctype="multipart/form-data">
+        <div>
+          <p>Olá, {{ u.name }}</p>
+          <p>Idade: {{ u.age }}</p>
+          <p>Email: {{ u.email }}</p>
+          <p>Sexo: {{ u.sex }}</p>
+        </div>
+
+        <div class="step">
+          <label for="q2_02" class="block mb-1">Você sabe o que é o Google Colab?</label>
+          <select id="q2_02" name="q2_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q2_03" class="block mb-1">Você já utilizou o Google Colab?</label>
+          <select id="q2_03" name="q2_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q2_04" class="block mb-1">Você já utilizou python para desenvolver alguma tarefa ou aplicação?</label>
+          <select id="q2_04" name="q2_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+      
+        <div class="step hidden">
+          <label for="q2_05" class="block mb-1">No seu dia a dia você acha que pode aplicar programação em alguma atividade que desempenha?</label>
+          <select id="q2_05" name="q2_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q2_07" class="block mb-1">Você sabe afirmar COM CERTEZA se é possível utilizar Python para facilitar a análise de dados em Excel?</label>
+          <select id="q2_07" name="q2_07" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <button type="button" id="avancar" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Avançar</button>
+
+        <input type="hidden" name="dir_name" value="{{ u.dir_name }}">
+        <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
+      </form>
+    </div>
+
+    <div id="formMessage" class="hidden">
+      <h1 class="text-2xl font-bold mb-8 text-center">Obrigado pela participação</h1>
+
+      <a href="?responder">Responder Novamente</a>
+    </div>
+  </div>
+
+  <style>
+
+  </style>
+
+  <script>
+
+  let steps = document.querySelectorAll('.step');
+  let currentStep = 1;
+
+  const btn_avanca = document.querySelector('#avancar');
+  const btn_enviar = document.querySelector('#enviar');
+  btn_avanca.addEventListener('click', function(ev){
+    ev.preventDefault();
+    let totalSteps = steps.length;
+
+    if (steps[currentStep-1].querySelector('input, select').value.trim() == '') {
+      alert('Preencha o campo atual.');
+    } else {
+      if (currentStep == totalSteps-1) {
+        btn_enviar.classList.remove('hidden');
+        btn_avanca.classList.add('hidden');
+      }
+
+      for (let i = 0; i < totalSteps; i++) {
+        steps[i].classList.add('hidden');
+      }
+
+      steps[currentStep].classList.remove('hidden');
+      currentStep++;
+    }
+  });
+
+    const form_save = document.querySelector('#formCadastro')
+    form_save.addEventListener('submit', function(ev){
+      ev.preventDefault();
+
+      const formData = new FormData(form_save);
+
+      fetch('/resposta_fim', {
+        method: "POST", 
+        body: formData,
+      })
+      .then(res => console.log(res.json()))
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+
+      document.querySelector('#formItem').classList.add('hidden')
+      document.querySelector('#formMessage').classList.remove('hidden')
+    });
+    
+  </script>
+</body>
 </html>

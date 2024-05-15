@@ -12,8 +12,10 @@ python -m venv venv
 source venv/bin/activate
 ```
 
+### 2 Instalar CMake
+[Download CMake](https://cmake.org/download/)
 
-### 2 Instalar pacotes
+### 3 Instalar pacotes
 
 ```bash
 pip install -r requirements.txt

@@ -8,22 +8,22 @@
 </head>
 <body class="bg-gray-900 text-gray-200">
   <div class="flex justify-center items-center h-screen">
-    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full" id="formItem">
       <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
-      <form id="formCadastro" method="post" action="/resposta_inicio" class="space-y-4">
-        <div>
+      <form id="formCadastro" method="post" action="{{ url_for('resposta_inicio') }}" class="space-y-4" enctype="multipart/form-data">
+        <div class="step">
           <label for="nome" class="block mb-1">Nome</label>
           <input type="text" id="nome" name="nome" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
         </div>
-        <div>
+        <div class="step hidden">
           <label for="idade" class="block mb-1">Idade</label>
           <input type="number" id="idade" name="idade" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
         </div>
-        <div>
+        <div class="step hidden">
           <label for="email" class="block mb-1">Email</label>
           <input type="email" id="email" name="email" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
         </div>
-        <div>
+        <div class="step hidden">
           <label for="sexo" class="block mb-1">Qual o seu sexo?</label>
           <select id="sexo" name="sexo" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
             <option value="M">Masculino</option>
@@ -32,17 +32,337 @@
             <option value="N">Prefiro não informar</option>
           </select>
         </div>
-        <div>
+
+        <!--div class="step hidden">
           <label for="foto1" class="block mb-1">Foto 1</label>
           <input type="file" id="foto1" name="foto1" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
         </div>
-        <div>
+        <div class="step hidden">
           <label for="foto2" class="block mb-1">Foto 2</label>
           <input type="file" id="foto2" name="foto2" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div-->
+
+        <div class="step hidden">
+          <label for="q1_01" class="block mb-1">Informe a Empresa ou Instituição que você representa</label>
+          <input type="q1_01" id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
         </div>
-        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
+
+        <div class="step hidden">
+          <label for="q1_02" class="block mb-1">Você sabe o que é o Google Colab?</label>
+          <select id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q1_03" class="block mb-1">Você já utilizou o Google Colab?</label>
+          <select id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q1_04" class="block mb-1">Você já utilizou python para desenvolver alguma tarefa ou aplicação?</label>
+          <select id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+      
+        <div class="step hidden">
+          <label for="q1_05" class="block mb-1">No seu dia a dia você acha que pode aplicar programação em alguma atividade que desempenha?</label>
+          <select id="q1_05" name="q1_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <div class="step hidden">
+          <label for="q1_06" class="block mb-1">Além do excel você conhece alguma ferramenta que pode te ajudar a manipular dados? Se Sim, qual ferramenta?</label>
+          <input type="q1_06" id="q1_06" name="q1_06" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+        </div>
+
+        <div class="step hidden">
+          <label for="q1_07" class="block mb-1">Você sabe afirmar COM CERTEZA se é possível utilizar Python para facilitar a análise de dados em Excel?</label>
+          <select id="q1_07" name="q1_07" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+
+        <button type="button" id="avancar" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Avançar</button>
+
+        
+        <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
       </form>
     </div>
+
+    <div id="formMessage" class="hidden">
+      <h1 class="text-2xl font-bold mb-8 text-center">Obrigado pela participação</h1>
+
+      <a href="?responder">Responder Novamente</a>
+    </div>
   </div>
+
+  <!--div class="contentarea">
+    <h1>MDN - navigator.mediaDevices.getUserMedia(): Still photo capture demo</h1>
+    <p>
+      This example demonstrates how to set up a media stream using your built-in
+      webcam, fetch an image from that stream, and create a PNG using that image.
+    </p>
+    <div class="camera">
+      <video id="video">Video stream not available.</video>
+      <button id="startbutton">Take photo</button>
+    </div>
+    <canvas id="canvas"> </canvas>
+    <div class="output">
+      <img id="photo" alt="The screen capture will appear in this box." />
+    </div>
+    <p>
+      Visit our article
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API/Taking_still_photos">
+        Taking still photos with WebRTC</a
+      >
+      to learn more about the technologies used here.
+    </p>
+  </div-->
+  <style>
+    /*
+    #video {
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px black;
+  width: 320px;
+  height: 240px;
+}
+
+#photo {
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px black;
+  width: 320px;
+  height: 240px;
+}
+
+#canvas {
+  display: none;
+}
+
+.camera {
+  width: 340px;
+  display: inline-block;
+}
+
+.output {
+  width: 340px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#startbutton {
+  display: block;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 32px;
+  background-color: rgb(0 150 0 / 50%);
+  border: 1px solid rgb(255 255 255 / 70%);
+  box-shadow: 0px 0px 1px 2px rgb(0 0 0 / 20%);
+  font-size: 14px;
+  font-family: "Lucida Grande", "Arial", sans-serif;
+  color: rgb(255 255 255 / 100%);
+}
+
+.contentarea {
+  font-size: 16px;
+  font-family: "Lucida Grande", "Arial", sans-serif;
+  width: 760px;
+}*/
+  </style>
+
+  <script>
+/*
+(() => {
+  // The width and height of the captured photo. We will set the
+  // width to the value defined here, but the height will be
+  // calculated based on the aspect ratio of the input stream.
+
+  const width = 320; // We will scale the photo width to this
+  let height = 0; // This will be computed based on the input stream
+
+  // |streaming| indicates whether or not we're currently streaming
+  // video from the camera. Obviously, we start at false.
+
+  let streaming = false;
+
+  // The various HTML elements we need to configure or control. These
+  // will be set by the startup() function.
+
+  let video = null;
+  let canvas = null;
+  let photo = null;
+  let startbutton = null;
+
+  function showViewLiveResultButton() {
+    if (window.self !== window.top) {
+      // Ensure that if our document is in a frame, we get the user
+      // to first open it in its own tab or window. Otherwise, it
+      // won't be able to request permission for camera access.
+      document.querySelector(".contentarea").remove();
+      const button = document.createElement("button");
+      button.textContent = "View live result of the example code above";
+      document.body.append(button);
+      button.addEventListener("click", () => window.open(location.href));
+      return true;
+    }
+    return false;
+  }
+
+  function startup() {
+    if (showViewLiveResultButton()) {
+      return;
+    }
+    video = document.getElementById("video");
+    canvas = document.getElementById("canvas");
+    photo = document.getElementById("photo");
+    startbutton = document.getElementById("startbutton");
+
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: false })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((err) => {
+        console.error(`An error occurred: ${err}`);
+      });
+
+    video.addEventListener(
+      "canplay",
+      (ev) => {
+        if (!streaming) {
+          height = video.videoHeight / (video.videoWidth / width);
+
+          // Firefox currently has a bug where the height can't be read from
+          // the video, so we will make assumptions if this happens.
+
+          if (isNaN(height)) {
+            height = width / (4 / 3);
+          }
+
+          video.setAttribute("width", width);
+          video.setAttribute("height", height);
+          canvas.setAttribute("width", width);
+          canvas.setAttribute("height", height);
+          streaming = true;
+        }
+      },
+      false,
+    );
+
+    startbutton.addEventListener(
+      "click",
+      (ev) => {
+        takepicture();
+        ev.preventDefault();
+      },
+      false,
+    );
+
+    clearphoto();
+  }
+
+  // Fill the photo with an indication that none has been
+  // captured.
+
+  function clearphoto() {
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#AAA";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    const data = canvas.toDataURL("image/png");
+    photo.setAttribute("src", data);
+  }
+
+  // Capture a photo by fetching the current contents of the video
+  // and drawing it into a canvas, then converting that to a PNG
+  // format data URL. By drawing it on an offscreen canvas and then
+  // drawing that to the screen, we can change its size and/or apply
+  // other changes before drawing it.
+
+  function takepicture() {
+    const context = canvas.getContext("2d");
+    if (width && height) {
+      canvas.width = width;
+      canvas.height = height;
+      context.drawImage(video, 0, 0, width, height);
+
+      const data = canvas.toDataURL("image/png");
+      photo.setAttribute("src", data);
+    } else {
+      clearphoto();
+    }
+  }
+
+  // Set up our event listener to run the startup process
+  // once loading is complete.
+  window.addEventListener("load", startup, false);
+})();
+
+*/
+  let steps = document.querySelectorAll('.step');
+  let currentStep = 1;
+
+  const btn_avanca = document.querySelector('#avancar');
+  const btn_enviar = document.querySelector('#enviar');
+  btn_avanca.addEventListener('click', function(ev){
+    ev.preventDefault();
+    let totalSteps = steps.length;
+
+    if (steps[currentStep-1].querySelector('input, select').value.trim() == '') {
+      alert('Preencha o campo atual.');
+    } else {
+      if (currentStep == totalSteps-1) {
+        btn_enviar.classList.remove('hidden');
+        btn_avanca.classList.add('hidden');
+      }
+
+      for (let i = 0; i < totalSteps; i++) {
+        steps[i].classList.add('hidden');
+      }
+
+      steps[currentStep].classList.remove('hidden');
+      currentStep++;
+    }
+  });
+
+    const form_save = document.querySelector('#formCadastro')
+    form_save.addEventListener('submit', function(ev){
+      ev.preventDefault();
+
+      // const foto1 = document.getElementById('foto1');
+      // const foto2 = document.getElementById('foto2');
+
+      // const file1 = foto1.files[0];
+      // const file2 = foto2.files[0];
+
+      const formData = new FormData(form_save);
+      // formData.append('foto1', file1, 'foto1.jpg');
+      // formData.append('foto2', file2, 'foto2.jpg');
+
+      fetch('/resposta_inicio', {
+        method: "POST", 
+        body: formData,
+      })
+      .then(res => console.log(res.json()))
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+
+      document.querySelector('#formItem').classList.add('hidden')
+      document.querySelector('#formMessage').classList.remove('hidden')
+    });
+    
+  </script>
 </body>
 </html>

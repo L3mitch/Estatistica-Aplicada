@@ -5,6 +5,7 @@ from pathlib import Path
 
 import face_recognition
 from PIL import Image, ImageDraw
+import os
 
 DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
 BOUNDING_BOX_COLOR = "blue"
@@ -146,8 +147,16 @@ def validate(model: str = "hog"):
                 image_location=str(filepath.absolute()), model=model
             )
 
+def makeDirectories():
+    directoryList = ['./output', './test', './training', './validation']
+    for directory in directoryList:
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+
 
 if __name__ == "__main__":
+    makeDirectories()
+    
     if args.train:
         encode_known_faces(model=args.m)
     if args.validate:
