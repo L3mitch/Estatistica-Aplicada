@@ -1,12 +1,10 @@
-import argparse
-import pickle
-from collections import Counter
-from pathlib import Path
-
-import face_recognition
-from PIL import Image, ImageDraw
 import os
+import pickle # Lê e armazena a lista de encodings
+from collections import Counter # Conta o número de ocorrências de um valor
+from pathlib import Path # Manipula caminhos de arquivos
 
+import face_recognition # Reconhece faces em imagens
+from PIL import Image, ImageDraw # Cria e edita imagens
 DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
 BOUNDING_BOX_COLOR = "blue"
 TEXT_COLOR = "white"
@@ -14,53 +12,104 @@ TEXT_COLOR = "white"
 # Create directories if they don't already exist
 Path("training").mkdir(exist_ok=True)
 Path("output").mkdir(exist_ok=True)
-Path("validation").mkdir(exist_ok=True)
+Path("match").mkdir(exist_ok=True)
 
-parser = argparse.ArgumentParser(description="Recognize faces in an image")
-parser.add_argument("--train", action="store_true", help="Train on input data")
-parser.add_argument(
-    "--validate", action="store_true", help="Validate trained model"
-)
-parser.add_argument(
-    "--test", action="store_true", help="Test the model with an unknown image"
-)
-parser.add_argument(
-    "-m",
-    action="store",
-    default="hog",
-    choices=["hog", "cnn"],
-    help="Which model to use for training: hog (CPU), cnn (GPU)",
-)
-parser.add_argument(
-    "-f", action="store", help="Path to an image with an unknown face"
-)
-args = parser.parse_args()
 
-def encode_known_faces(
-    model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
+def encode_new_face(
+    name: str,
+    model: str = "hog",
+    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
 ) -> None:
     """
-    Loads images in the training directory and builds a dictionary of their
-    names and encodings.
+    Given a new face, add it to the known encodings.
     """
-    names = []
-    encodings = []
+    with encodings_location.open(mode="rb") as f:
+        loaded_encodings = pickle.load(f)
+    names = loaded_encodings["names"]
+    encodings = loaded_encodings["encodings"]
 
-    for filepath in Path("training").glob("*/*"):
+    for filepath in Path("training").glob(f"{name}/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
-
         face_locations = face_recognition.face_locations(image, model=model)
         face_encodings = face_recognition.face_encodings(image, face_locations)
-
         for encoding in face_encodings:
             names.append(name)
             encodings.append(encoding)
-
+    
     name_encodings = {"names": names, "encodings": encodings}
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
+    return True
+ 
+def match_face(
+    match_name: str,
+    image_id: str,
+    model: str = "hog",
+    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
+) -> None:
+    """
+    Given an image and a name, checks if the face in the image matches the name.
+    """
+    with encodings_location.open(mode="rb") as f:
+        loaded_encodings = pickle.load(f)
+    filepath = Path("match") / f"{image_id}.jpg"
+    input_image = face_recognition.load_image_file(filepath)
 
+    input_face_locations = face_recognition.face_locations(
+        input_image, model=model
+    )
+    input_face_encodings = face_recognition.face_encodings(
+        input_image, input_face_locations
+    )
+
+    pillow_image = Image.fromarray(input_image)
+    draw = ImageDraw.Draw(pillow_image)
+
+    for bounding_box, unknown_encoding in zip(
+        input_face_locations, input_face_encodings
+    ):
+        name = _recognize_face(unknown_encoding, loaded_encodings)
+        # os.remove(filepath)
+        if name == match_name:
+            return True
+        elif name == None:
+            return False
+        else:
+            # _display_face(draw, bounding_box, name + "não é " + match_name)
+            return False
+
+    del draw
+    pillow_image.show()
+
+def recognize_face(
+    image_id: str,
+    model: str = "hog",
+    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
+) -> None:
+    """
+    Given an image and a name, checks if the face in the image matches the name.
+    """
+    with encodings_location.open(mode="rb") as f:
+        loaded_encodings = pickle.load(f)
+    filepath = Path("match") / f"{image_id}.jpg"
+    input_image = face_recognition.load_image_file(filepath)
+
+    input_face_locations = face_recognition.face_locations(
+        input_image, model=model
+    )
+    input_face_encodings = face_recognition.face_encodings(
+        input_image, input_face_locations
+    )
+
+    pillow_image = Image.fromarray(input_image)
+    draw = ImageDraw.Draw(pillow_image)
+
+    for unknown_encoding in zip(
+        input_face_locations, input_face_encodings
+    ):
+        name = _recognize_face(unknown_encoding, loaded_encodings)
+    return name
 
 def recognize_faces(
     image_location: str,
@@ -136,31 +185,23 @@ def _display_face(draw, bounding_box, name):
     )
 
 
-def validate(model: str = "hog"):
-    """
-    Runs recognize_faces on a set of images with known faces to validate
-    known encodings.
-    """
-    for filepath in Path("validation").rglob("*"):
-        if filepath.is_file():
-            recognize_faces(
-                image_location=str(filepath.absolute()), model=model
-            )
 
-def makeDirectories():
-    directoryList = ['./output', './test', './training', './validation']
-    for directory in directoryList:
-        if not os.path.exists(directory):
-            os.mkdir(directory)
+# Encode new face
+# Precisa que seja adicionado um diretório com o nome da pessoa na pasta training
+# Exemplo: /training/michel_jackson
+# Recebe o nome da pessoa a ser adicionada
+# Adiciona a pessoa na lista de encodings
+
+# encode_new_face("michel_jackson", model="hog")
+
+# Match Face
+# Precisa que seja adicionada a imagem a testar na pasta match, com o nome igual ao id que será passado
+# Exemplo: /match/86.jpg
+# Recebe o nome da pessoa a ser comparada e o id da imagem a ser comparada
+# Retorna True se a pessoa na imagem é a mesma que a pessoa passada
+# Retorna False se a pessoa na imagem não é a mesma que a pessoa passada
+
+# print(match_face("michel_jackson", "86", model="hog"))
 
 
-if __name__ == "__main__":
-    makeDirectories()
-    
-    if args.train:
-        encode_known_faces(model=args.m)
-    if args.validate:
-        validate(model=args.m)
-    if args.test:
-        recognize_faces(image_location=args.f, model=args.m)
-        #recognize_faces(image_location="C:/Users/elias/_Documentos sem merda dos outros programas/Programacao/Reconhecimento facial/realpython/source_code_final/test/Eon_Musk_Royal_Society.jpg", model=args.m)
+

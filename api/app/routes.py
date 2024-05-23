@@ -1,7 +1,7 @@
 import os 
 from flask import render_template, request
 from app import app
-from detector import *
+from detector import * # Isso precisa mudar, não está importando do local correto
 
 import csv
 
@@ -143,7 +143,16 @@ def config_data():
 
     return filename, fields
 
+@app.route('/leitura_facial', methods=['POST'])
 def leitura_facial():
+    id_imagem = request.form['id_imagem']
     return{
-        
+        recognize_face(id_imagem, model="hog")
+    }
+
+@app.route('/adicionar_pessoa', methods=['POST'])
+def adicionar_pessoa():
+    nome = request.form['nome']
+    return{
+        encode_new_face(nome, model="hog")
     }
