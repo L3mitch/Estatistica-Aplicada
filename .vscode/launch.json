@@ -9,6 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "module": "flask",
+            "python": "C:/xampp/htdocs/Estatistica-Aplicada/api/venv/Scripts/python.exe",
             "env": {
                 "FLASK_APP": "api/app.py",
                 "FLASK_DEBUG": "1"

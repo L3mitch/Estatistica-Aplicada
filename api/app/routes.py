@@ -25,7 +25,7 @@ def salva_resposta_inicio():
         filename, fields = config_data()
 
         dir_name = request.form['nome'].lower().replace(' ', '')
-        dir_user = 'reconhecimento_facial/training/' + dir_name
+        dir_user = 'api/training/' + dir_name
         '''os.mkdir(dir_user)
         f1 = request.files['foto1']
         f1_titulo = dir_name + '_01.' + f1.rsplit('.', 1)[1].lower()
@@ -63,6 +63,7 @@ def salva_resposta_inicio():
             csvwriter.writerow(fields)
             csvwriter.writerows(rows)
 
+        adicionar_pessoa(request)
         return {
             'success': True,
             'message': 'salva_resposta_inicio cadastradas'
@@ -150,8 +151,8 @@ def leitura_facial():
         recognize_face(id_imagem, model="hog")
     }
 
-@app.route('/adicionar_pessoa', methods=['POST'])
-def adicionar_pessoa():
+
+def adicionar_pessoa(request):
     nome = request.form['nome']
     return{
         encode_new_face(nome, model="hog")

@@ -20,16 +20,20 @@ requisicoes = [[69, 2, "kauan_nunes", 0, 0],
 def ler_requisicoes():
     url = "http://localhost:3000/requisicoes"
     response = requests.get(url)
-    return response.json()
+    # Resposta esperada: [{"id": "ID da requisição aqui", "tipo": 0, "nome": "nome_aqui"},]
+    treated_response = [response["id"], response["tipo"], response["nome"], 0, 0]
+    return treated_response
 
 def enviar_resposta(requisicao):
     url = "http://localhost:3000/requisicoes"
-    data = {requisicao}
+    data = {"id": requisicao[0], "nome": requisicao[2], "sucesso": requisicao[4]}
+    # Resposta enviada: {"id": "ID da requisição aqui", "nome": "nome_aqui", "sucesso": 1}
     response = requests.post(url, data=data)
     return response.json()
 
-
 while True:
+    # Ler requisições
+    requisicoes += ler_requisicoes()
     # Tratamento da requisição
     for requisicao in requisicoes:
         if requisicao[3] == 1:

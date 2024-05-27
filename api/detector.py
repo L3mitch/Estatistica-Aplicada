@@ -70,7 +70,7 @@ def match_face(
         input_face_locations, input_face_encodings
     ):
         name = _recognize_face(unknown_encoding, loaded_encodings)
-        # os.remove(filepath)
+        os.remove(filepath)
         if name == match_name:
             return True
         elif name == None:
@@ -109,6 +109,10 @@ def recognize_face(
         input_face_locations, input_face_encodings
     ):
         name = _recognize_face(unknown_encoding, loaded_encodings)
+    os.remove(filepath)
+
+    del draw
+    pillow_image.show()
     return name
 
 def recognize_faces(
