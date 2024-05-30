@@ -8,10 +8,10 @@
 </head>
 <body class="bg-gray-900 text-gray-200">
   <div class="flex justify-center items-center h-screen">
-    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full" id="formItem">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-lg w-full" id="formItem">
       <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
-      <form id="formCadastro" method="post" action="{{ url_for('resposta_fim') }}" class="space-y-4" enctype="multipart/form-data">
-        <div>
+      <form id="formCadastro" method="post" action="{{ url_for('resposta_fim') }}" class="flex flex-col gap-y-4 justify-center" enctype="multipart/form-data">
+        <div class="w-full flex flex-col bg-gray-700 rounded-lg p-3 mb-8 gap-y-2 justify-start">
           <p>Olá, {{ u.name }}</p>
           <p>Idade: {{ u.age }}</p>
           <p>Email: {{ u.email }}</p>
@@ -19,49 +19,32 @@
         </div>
 
         <div class="step">
-          <label for="q2_02" class="block mb-1">Você sabe o que é o Google Colab?</label>
-          <select id="q2_02" name="q2_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+          <label for="q1_01" class="block mb-1" >Você conhece e sabe para que serve a ferramenta "Django" ?</label>
+          <select id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
             <option value="S">Sim</option>
             <option value="N">Não</option>
           </select>
         </div>
 
         <div class="step hidden">
-          <label for="q2_03" class="block mb-1">Você já utilizou o Google Colab?</label>
-          <select id="q2_03" name="q2_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
+          <label for="q1_02" class="block mb-1" >O que é e pra que serve uma API?</label>
+          <input type="q1_02" id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
         </div>
 
         <div class="step hidden">
-          <label for="q2_04" class="block mb-1">Você já utilizou python para desenvolver alguma tarefa ou aplicação?</label>
-          <select id="q2_04" name="q2_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
-      
-        <div class="step hidden">
-          <label for="q2_05" class="block mb-1">No seu dia a dia você acha que pode aplicar programação em alguma atividade que desempenha?</label>
-          <select id="q2_05" name="q2_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
+          <label for="q1_03" class="block mb-1">O que é um arquivo csv?</label>
+          <input type="q1_03" id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
         </div>
 
         <div class="step hidden">
-          <label for="q2_07" class="block mb-1">Você sabe afirmar COM CERTEZA se é possível utilizar Python para facilitar a análise de dados em Excel?</label>
-          <select id="q2_07" name="q2_07" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
+          <label for="q1_04" class="block mb-1">Qual a diferença entre Front-end e Back-end?</label>
+          <input type="q1_04" id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
         </div>
 
-        <button type="button" id="avancar" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Avançar</button>
+        <button type="button" id="avancar" class="w-1/2 mx-auto bg-blue-500 hover:bg-blue-700 text-white mt-12 font-bold py-2 px-4 rounded-lg">Avançar</button>
 
         <input type="hidden" name="dir_name" value="{{ u.dir_name }}">
-        <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
+        <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white mt-12 font-bold py-2 px-4 rounded-lg">Enviar</button>
       </form>
     </div>
 
@@ -106,7 +89,7 @@
       const formData = new FormData(form_save);
 
       fetch('/resposta_fim', {
-        method: "POST", 
+        method: "POST",
         body: formData,
       })
       .then(res => console.log(res.json()))
@@ -116,7 +99,7 @@
       document.querySelector('#formItem').classList.add('hidden')
       document.querySelector('#formMessage').classList.remove('hidden')
     });
-    
+
   </script>
 </body>
 </html>

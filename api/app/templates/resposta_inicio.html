@@ -1,269 +1,283 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <title>Estatística Aplicada</title>
-</head>
-<body class="bg-gray-900 text-gray-200">
-  <div class="flex justify-center items-center h-screen">
-    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full" id="formItem">
-      <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
-      <form id="formCadastro" method="post" action="{{ url_for('resposta_inicio') }}" class="space-y-4" enctype="multipart/form-data">
-        
-        <div class="contentarea">
-          <div class="camera">
-            <video id="video">Video stream not available.</video>
-            <button type="button" id="startbutton">Tirar Foto</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Estatística Aplicada</title>
+  </head>
+  <body class="bg-gray-900 text-gray-200">
+    <div class="flex justify-center items-center h-screen">
+      <div
+        class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-lg w-full"
+        id="formItem"
+      >
+        <h1 class="text-2xl font-bold mb-8 text-center">
+          Por favor, responda às questões abaixo para realizarmos a pesquisa
+        </h1>
+        <form
+          id="formCadastro"
+          method="post"
+          action="{{ url_for('resposta_inicio') }}"
+          class="flex flex-col gap-y-4 justify-center"
+          enctype="multipart/form-data"
+        >
+          <div class="contentarea flex flex-col gap-y-8 justify-center">
+            <div class="camera w-full flex flex-col bg-gray-700 rounded-lg p-3 gap-y-5 justify-center">
+              <video class="hidden" id="video">
+                Video stream not available.
+              </video>
+              <p class="text-center">Tirar uma foto para identificação posterior</p>
+              <button
+                class="mx-auto rounded-lg bg-red-500 px-5 py-3 transition-all hover:bg-red-700"
+                type="button"
+                id="startbutton"
+              >
+                Tirar Foto
+              </button>
+            </div>
+            <canvas class="hidden" id="canvas"> </canvas>
+            <input type="hidden" id="user_photo" name="user_photo" />
           </div>
-          <canvas id="canvas"> </canvas>
-          <input type="hidden" id="user_photo" name="user_photo">
-        
-        </div>
-        
-        <div class="step">
-          <label for="nome" class="block mb-1">Nome</label>
-          <input type="text" id="nome" name="nome" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
-        <div class="step hidden">
-          <label for="idade" class="block mb-1">Idade</label>
-          <input type="number" id="idade" name="idade" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
-        <div class="step hidden">
-          <label for="email" class="block mb-1">Email</label>
-          <input type="email" id="email" name="email" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
-        <div class="step hidden">
-          <label for="sexo" class="block mb-1">Qual o seu sexo?</label>
-          <select id="sexo" name="sexo" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
-            <option value="O">Outro</option>
-            <option value="N">Prefiro não informar</option>
-          </select>
-        </div>
 
-        <div class="step hidden">
-          <label for="q1_01" class="block mb-1">Informe a Empresa ou Instituição que você representa</label>
-          <input type="q1_01" id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
+          <div class="step">
+            <label for="nome" class="block mb-1">Nome</label>
+            <input type="text" id="nome" name="nome" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+          </div>
+          <div class="step hidden">
+            <label for="idade" class="block mb-1">Idade</label>
+            <input type="number" id="idade" name="idade" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+          </div>
 
-        <div class="step hidden">
-          <label for="q1_02" class="block mb-1">Você sabe o que é o Google Colab?</label>
-          <select id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
+          <div class="step hidden">
+            <label for="email" class="block mb-1">Email</label>
+            <input type="email" id="email" name="email" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+          </div>
 
-        <div class="step hidden">
-          <label for="q1_03" class="block mb-1">Você já utilizou o Google Colab?</label>
-          <select id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
+          <div class="step hidden">
+            <label for="sexo" class="block mb-1">Qual o seu sexo?</label>
+            <select id="sexo" name="sexo" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
+              <option value="N">Prefiro não informar</option>
+            </select>
+          </div>
 
-        <div class="step hidden">
-          <label for="q1_04" class="block mb-1">Você já utilizou python para desenvolver alguma tarefa ou aplicação?</label>
-          <select id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
-      
-        <div class="step hidden">
-          <label for="q1_05" class="block mb-1">No seu dia a dia você acha que pode aplicar programação em alguma atividade que desempenha?</label>
-          <select id="q1_05" name="q1_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
+          <div class="step hidden">
+            <label for="q1_01" class="block mb-1" >Você conhece e sabe para que serve a ferramenta "Django" ?</label>
+            <select id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
+              <option value="S">Sim</option>
+              <option value="N">Não</option>
+            </select>
+          </div>
 
-        <div class="step hidden">
-          <label for="q1_06" class="block mb-1">Além do excel você conhece alguma ferramenta que pode te ajudar a manipular dados? Se Sim, qual ferramenta?</label>
-          <input type="q1_06" id="q1_06" name="q1_06" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
+          <div class="step hidden">
+            <label for="q1_02" class="block mb-1" >O que é e pra que serve uma API?</label>
+            <input type="q1_02" id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+          </div>
 
-        <div class="step hidden">
-          <label for="q1_07" class="block mb-1">Você sabe afirmar COM CERTEZA se é possível utilizar Python para facilitar a análise de dados em Excel?</label>
-          <select id="q1_07" name="q1_07" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-            <option value="S">Sim</option>
-            <option value="N">Não</option>
-          </select>
-        </div>
+          <div class="step hidden">
+            <label for="q1_03" class="block mb-1">O que é um arquivo csv?</label>
+            <input type="q1_03" id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+          </div>
 
-        <button type="button" id="avancar" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Avançar</button>
+          <div class="step hidden">
+            <label for="q1_04" class="block mb-1">Qual a diferença entre Front-end e Back-end?</label>
+            <input type="q1_04" id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+          </div>
 
-        
-        <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Enviar</button>
-      </form>
+          <button type="button" id="avancar" class="w-1/2 mx-auto bg-blue-500 mt-12 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-all">
+            Avançar
+          </button>
+
+          <button type="submit" id="enviar" class="hidden w-1/2 mx-auto bg-green-500 mt-12  hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg" >
+            Enviar
+          </button>
+
+        </form>
+      </div>
+
+      <div id="formMessage" class="hidden">
+        <h1 class="text-2xl font-bold mb-8 text-center">
+          Obrigado pela participação
+        </h1>
+
+        <a href="?responder">Responder Novamente</a>
+      </div>
     </div>
-
-    <div id="formMessage" class="hidden">
-      <h1 class="text-2xl font-bold mb-8 text-center">Obrigado pela participação</h1>
-
-      <a href="?responder">Responder Novamente</a>
-    </div>
-  </div>
+    <script>
+      let steps = document.querySelectorAll(".step");
+      let currentStep = 1;
+      const btn_avanca = document.querySelector("#avancar");
+      const btn_enviar = document.querySelector("#enviar");
 
 
-  <script>
+      btn_avanca.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        let totalSteps = steps.length;
 
-
-  let steps = document.querySelectorAll('.step');
-  let currentStep = 1;
-
-  const btn_avanca = document.querySelector('#avancar');
-  const btn_enviar = document.querySelector('#enviar');
-  btn_avanca.addEventListener('click', function(ev){
-    ev.preventDefault();
-    let totalSteps = steps.length;
-
-    if (steps[currentStep-1].querySelector('input, select').value.trim() == '') {
-      alert('Preencha o campo atual.');
-    } else {
-      if (currentStep == totalSteps-1) {
-        btn_enviar.classList.remove('hidden');
-        btn_avanca.classList.add('hidden');
-      }
-
-      for (let i = 0; i < totalSteps; i++) {
-        steps[i].classList.add('hidden');
-      }
-
-      steps[currentStep].classList.remove('hidden');
-      currentStep++;
-    }
-  });
-
-    const form_save = document.querySelector('#formCadastro')
-    form_save.addEventListener('submit', function(ev){
-      ev.preventDefault();
-
-      const formData = new FormData(form_save);
-      fetch('/resposta_inicio', {
-        method: "POST", 
-        body: formData,
-      })
-      .then(res => console.log(res.json()))
-      .then(data => console.log(data))
-      .catch(err => console.log(err))
-
-      document.querySelector('#formItem').classList.add('hidden')
-      document.querySelector('#formMessage').classList.remove('hidden')
-    });
-    
-
-
-
-
-    (() => {
-    const width = 320;
-    let height = 0;
-
-    let streaming = false;
-
-    let video = null;
-    let canvas = null;
-    let user_photo = null;
-    let startbutton = null;
-    let qtdPhoto = 0;
-
-    function showViewLiveResultButton() {
-      if (window.self !== window.top) {
-        document.querySelector(".contentarea").remove();
-        const button = document.createElement("button");
-        button.textContent = "View live result of the example code above";
-        document.body.append(button);
-        button.addEventListener("click", () => window.open(location.href));
-        return true;
-      }
-      return false;
-    }
-
-    function startup() {
-      if (showViewLiveResultButton()) {
-        return;
-      }
-      video = document.getElementById("video");
-      canvas = document.getElementById("canvas");
-      user_photo = document.getElementById("user_photo");
-      startbutton = document.getElementById("startbutton");
-
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then((stream) => {
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch((err) => {
-          console.error(`An error occurred: ${err}`);
-        });
-
-      video.addEventListener(
-        "canplay",
-        (ev) => {
-          if (!streaming) {
-            height = video.videoHeight / (video.videoWidth / width);
-
-            if (isNaN(height)) {
-              height = width / (4 / 3);
-            }
-
-            video.setAttribute("width", width);
-            video.setAttribute("height", height);
-            canvas.setAttribute("width", width);
-            canvas.setAttribute("height", height);
-            streaming = true;
+        if (steps[currentStep - 1].querySelector("input, select").value.trim() == "") {
+          alert("Preencha o campo atual.");
+        } else {
+          if (currentStep == totalSteps - 1) {
+            btn_enviar.classList.remove("hidden");
+            btn_avanca.classList.add("hidden");
           }
-        },
-        false,
-      );
 
-      startbutton.addEventListener(
-        "click",
-        (ev) => {
-          takepicture();
-          ev.preventDefault();
-        },
-        false,
-      );
+          for (let i = 0; i < totalSteps; i++) {
+            steps[i].classList.add("hidden");
+          }
 
-      clearphoto();
-    }
-
-    function clearphoto() {
-      const context = canvas.getContext("2d");
-      context.fillStyle = "#AAA";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-
-      const data = canvas.toDataURL("image/png");
-    }
-
-    function takepicture() {
-      const context = canvas.getContext("2d");
-      if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
-
-        const data = canvas.toDataURL("image/png");
-        user_photo.value = data;
-        if (qtdPhoto == 1) {
-          document.querySelector('.contentarea').classList.add('hidden')
+          steps[currentStep].classList.remove("hidden");
+          currentStep++;
         }
-        qtdPhoto++;
+      });
 
-      } else {
-        clearphoto();
-      }
-    }
+      const form_save = document.querySelector("#formCadastro");
+      form_save.addEventListener("submit", function (ev) {
+        ev.preventDefault();
 
-    window.addEventListener("load", startup, false);
-  })();
+        const formData = new FormData(form_save);
+        fetch("/resposta_inicio", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => console.log(res.json()))
+          .then((data) => console.log(data))
+          .catch((err) => console.log(err));
 
-  </script>
-</body>
+        document.querySelector("#formItem").classList.add("hidden");
+        document.querySelector("#formMessage").classList.remove("hidden");
+      });
+
+      (() => {
+        const width = 320;
+        let height = 0;
+
+        let streaming = false;
+
+        let video = null;
+        let canvas = null;
+        let user_photo = null;
+        let startbutton = null;
+        let qtdPhoto = 0;
+
+        function showViewLiveResultButton() {
+          if (window.self !== window.top) {
+            document.querySelector(".contentarea").remove();
+            const button = document.createElement("button");
+            button.textContent = "View live result of the example code above";
+            document.body.append(button);
+            button.addEventListener("click", () => window.open(location.href));
+            return true;
+          }
+          return false;
+        }
+
+        function startup() {
+          if (showViewLiveResultButton()) {
+            return;
+          }
+          video = document.getElementById("video");
+          canvas = document.getElementById("canvas");
+          user_photo = document.getElementById("user_photo");
+          startbutton = document.getElementById("startbutton");
+
+          startbutton.addEventListener(
+            "click",
+            (ev) => {
+              ev.preventDefault();
+              takepicture();
+            },
+            false
+          );
+
+          clearphoto();
+        }
+        function takepicture() {
+          Swal.fire({
+            title: "Tirar Foto",
+            html: '<video id="video" class="w-full rounded-lg" autoplay></video>',
+            showCancelButton: true,
+            confirmButtonText: "Tirar",
+            cancelButtonText: "Cancelar",
+            willOpen: () => {
+              const videoElement =
+                Swal.getHtmlContainer().querySelector("#video");
+              navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false })
+                .then((stream) => {
+                  videoElement.srcObject = stream;
+                  videoElement.play();
+                })
+                .catch((err) => {
+                  console.error(`An error occurred: ${err}`);
+                });
+            },
+            preConfirm: () => {
+              const videoElement =
+                Swal.getHtmlContainer().querySelector("#video");
+              height =
+                videoElement.videoHeight / (videoElement.videoWidth / width);
+              if (isNaN(height)) {
+                height = width / (4 / 3);
+              }
+              videoElement.setAttribute("width", width);
+              videoElement.setAttribute("height", height);
+              canvas.setAttribute("width", width);
+              canvas.setAttribute("height", height);
+              streaming = true;
+
+              const context = canvas.getContext("2d");
+              if (width && height) {
+                canvas.width = width;
+                canvas.height = height;
+                context.drawImage(videoElement, 0, 0, width, height);
+
+                const data = canvas.toDataURL("image/png");
+                user_photo.value = data;
+                document.querySelector(".contentarea").classList.add("hidden");
+                return data;
+              } else {
+                clearphoto();
+                return null;
+              }
+            },
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // mostra a foto e pergunta se quer tentar novamente
+              Swal.fire({
+                title: "Foto tirada com sucesso",
+                icon: "success",
+                html: `<img src="${result.value}" class="w-full rounded-lg" />`,
+                showCancelButton: true,
+                confirmButtonText: "Tirar outra",
+                cancelButtonText: "Continuar",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  takepicture();
+                }
+              });
+            } else {}
+          });
+        }
+
+        function clearphoto() {
+          const context = canvas.getContext("2d");
+          context.fillStyle = "#AAA";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+
+          const data = canvas.toDataURL("image/png");
+        }
+
+        window.addEventListener("load", startup, false);
+      })();
+    </script>
+  </body>
 </html>
