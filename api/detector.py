@@ -5,14 +5,14 @@ from pathlib import Path # Manipula caminhos de arquivos
 
 import face_recognition # Reconhece faces em imagens
 from PIL import Image, ImageDraw # Cria e edita imagens
-DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
+DEFAULT_ENCODINGS_PATH = Path("api/output/encodings.pkl")
 BOUNDING_BOX_COLOR = "blue"
 TEXT_COLOR = "white"
 
 # Create directories if they don't already exist
-Path("training").mkdir(exist_ok=True)
-Path("output").mkdir(exist_ok=True)
-Path("match").mkdir(exist_ok=True)
+Path("api/training").mkdir(exist_ok=True)
+Path("api/output").mkdir(exist_ok=True)
+Path("api/match").mkdir(exist_ok=True)
 
 
 def encode_new_face(
@@ -32,7 +32,7 @@ def encode_new_face(
     names = loaded_encodings["names"]
     encodings = loaded_encodings["encodings"]
 
-    for filepath in Path("training").glob(f"{name}/*"):
+    for filepath in Path("api/training").glob(f"{name}/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
         face_locations = face_recognition.face_locations(image, model=model)
@@ -57,7 +57,7 @@ def match_face(
     """
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
-    filepath = Path("match") / f"{image_id}.jpg"
+    filepath = Path("api/match") / f"{image_id}.jpg"
     input_image = face_recognition.load_image_file(filepath)
 
     input_face_locations = face_recognition.face_locations(
@@ -96,7 +96,7 @@ def recognize_face(
     """
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
-    filepath = Path("match") / f"{image_id}.jpg"
+    filepath = Path("api/match") / f"{image_id}.jpg"
     input_image = face_recognition.load_image_file(filepath)
 
     input_face_locations = face_recognition.face_locations(

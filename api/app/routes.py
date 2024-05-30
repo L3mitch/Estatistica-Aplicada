@@ -1,6 +1,7 @@
 import os 
 from flask import render_template, request
 from app import app
+import base64
 from detector import * # Isso precisa mudar, não está importando do local correto
 
 import csv
@@ -24,24 +25,26 @@ def salva_resposta_inicio():
     if request.method == 'POST':
         filename, fields = config_data()
 
-        dir_name = request.form['nome'].lower().replace(' ', '')
-        dir_user = 'api/training/' + dir_name
-        '''os.mkdir(dir_user)
-        f1 = request.files['foto1']
-        f1_titulo = dir_name + '_01.' + f1.rsplit('.', 1)[1].lower()
-        f1.save(dir_user, f1_titulo)
-        f2 = request.files['foto2']
-        f2_titulo = dir_name + '_02.' + f2.rsplit('.', 1)[1].lower()
-        f2.save(dir_user, f2_titulo)
-        '''
+        file_name = request.form['nome'].lower().replace(' ', '')
+        dir_user = 'api/training/' + file_name
+        if not os.path.exists(dir_user) :
+            os.mkdir(dir_user)
+
+        f1_titulo = file_name + '_01.jpg'
+        with open(dir_user + '/' + f1_titulo, "wb") as fh:
+            fh.write(threatPhoto(request))
+        f2_titulo = file_name + '_02.jpg'
+        with open(dir_user + '/' + f2_titulo, "wb") as fh:
+            fh.write(threatPhoto(request))
+
         rows = [
             [
-                dir_name,
+                file_name,
                 request.form['nome'],
                 request.form['idade'],
                 request.form['email'],
                 request.form['sexo'],
-                'f1_titulo',
+                f1_titulo,
                 'f2_titulo',
                 request.form['q1_01'],
                 request.form['q1_02'],
@@ -131,24 +134,22 @@ def salva_resposta_fim():
             'message': 'salva_resposta_inicio cadastradas'
         }
 
-@app.route('/user', methods=['GET'])
-def get_user():
-    return {
-        'usuario': 'Nome do Usuário'
-    }
 
-
-def config_data():
-    filename = "pesquisas.csv"
-    fields = ['dir_name', 'name', 'age', 'email', 'sex', 'photo_1', 'photo_2', 'q1_01', 'q1_02', 'q1_03', 'q1_04', 'q1_05', 'q1_06', 'q1_07', 'q2_02', 'q2_03', 'q2_04', 'q2_05', 'q2_07']
-
-    return filename, fields
 
 @app.route('/leitura_facial', methods=['POST'])
 def leitura_facial():
-    id_imagem = request.form['id_imagem']
+    id_imagem = request.form['user_photo']
+
+    file_name = hashlib.md5(id_imagem.encode()).hexdigest()
+    # file_name = request.form['nome'].lower().replace(' ', '')
+    dir_user = 'api/match/' 
+
+    f1_titulo = file_name + '.jpg'
+    with open(dir_user + '/' + f1_titulo, "wb") as fh:
+        fh.write(threatPhoto(request))
+
     return{
-        recognize_face(id_imagem, model="hog")
+        recognize_face(file_name, model="hog")
     }
 
 
@@ -157,3 +158,13 @@ def adicionar_pessoa(request):
     return{
         encode_new_face(nome, model="hog")
     }
+
+def config_data():
+    filename = "pesquisas.csv"
+    fields = ['dir_name', 'name', 'age', 'email', 'sex', 'photo_1', 'photo_2', 'q1_01', 'q1_02', 'q1_03', 'q1_04', 'q1_05', 'q1_06', 'q1_07', 'q2_02', 'q2_03', 'q2_04', 'q2_05', 'q2_07']
+
+    return filename, fields
+
+def threatPhoto(request):
+    userPhoto = request.form['user_photo'].replace('data:image/png;base64,', '');
+    return base64.b64decode(userPhoto)
