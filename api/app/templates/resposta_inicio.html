@@ -18,9 +18,8 @@
             <button type="button" id="startbutton">Tirar Foto</button>
           </div>
           <canvas id="canvas"> </canvas>
-          <div class="output">
-            <img id="photo" alt="The screen capture will appear in this box." />
-          </div>
+          <input type="hidden" id="user_photo" name="user_photo">
+        
         </div>
         
         <div class="step">
@@ -44,15 +43,6 @@
             <option value="N">Prefiro não informar</option>
           </select>
         </div>
-
-        <!--div class="step hidden">
-          <label for="foto1" class="block mb-1">Foto 1</label>
-          <input type="file" id="foto1" name="foto1" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div>
-        <div class="step hidden">
-          <label for="foto2" class="block mb-1">Foto 2</label>
-          <input type="file" id="foto2" name="foto2" accept="image/*;capture=camera" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
-        </div-->
 
         <div class="step hidden">
           <label for="q1_01" class="block mb-1">Informe a Empresa ou Instituição que você representa</label>
@@ -152,16 +142,7 @@
     form_save.addEventListener('submit', function(ev){
       ev.preventDefault();
 
-      // const foto1 = document.getElementById('foto1');
-      // const foto2 = document.getElementById('foto2');
-
-      // const file1 = foto1.files[0];
-      // const file2 = foto2.files[0];
-
       const formData = new FormData(form_save);
-      // formData.append('foto1', file1, 'foto1.jpg');
-      // formData.append('foto2', file2, 'foto2.jpg');
-
       fetch('/resposta_inicio', {
         method: "POST", 
         body: formData,
@@ -186,7 +167,7 @@
 
     let video = null;
     let canvas = null;
-    let photo = null;
+    let user_photo = null;
     let startbutton = null;
     let qtdPhoto = 0;
 
@@ -208,7 +189,7 @@
       }
       video = document.getElementById("video");
       canvas = document.getElementById("canvas");
-      photo = document.getElementById("photo");
+      user_photo = document.getElementById("user_photo");
       startbutton = document.getElementById("startbutton");
 
       navigator.mediaDevices
@@ -259,7 +240,6 @@
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       const data = canvas.toDataURL("image/png");
-      photo.setAttribute("src", data);
     }
 
     function takepicture() {
@@ -270,7 +250,7 @@
         context.drawImage(video, 0, 0, width, height);
 
         const data = canvas.toDataURL("image/png");
-        photo.setAttribute("src", data);
+        user_photo.value = data;
         if (qtdPhoto == 1) {
           document.querySelector('.contentarea').classList.add('hidden')
         }
