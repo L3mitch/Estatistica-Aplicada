@@ -23,8 +23,12 @@ def encode_new_face(
     """
     Given a new face, add it to the known encodings.
     """
-    with encodings_location.open(mode="rb") as f:
-        loaded_encodings = pickle.load(f)
+    if encodings_location.exists() and encodings_location.stat().st_size > 0:
+        with encodings_location.open(mode="rb") as f:
+            loaded_encodings = pickle.load(f)
+    else:
+        loaded_encodings = {"names": [], "encodings": []}
+    
     names = loaded_encodings["names"]
     encodings = loaded_encodings["encodings"]
 
