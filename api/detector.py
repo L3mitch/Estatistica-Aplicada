@@ -115,7 +115,7 @@ def recognize_face(
         name = _recognize_face(unknown_encoding, loaded_encodings)
         if not name:
             name = "Unknown"
-        if not bounding_box:
+        if bounding_box:
             _display_face(draw, bounding_box, name)
 
     os.remove(filepath)
