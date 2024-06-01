@@ -24,10 +24,10 @@ pip install -r requirements.txt
 
 ```bash
 // Para rodar na porta padrão
-flask run
+flask run --host=0.0.0.0
 
 // Para escolher a porta http
-flask run --port 5001
+flask run --host=0.0.0.0 --port 5001
 ```
 
 

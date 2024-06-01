@@ -4,6 +4,10 @@ from flask import render_template, request, redirect
 from app import app
 from detector import *
 
+api_path = ""
+if os.environ.get("FLASK_DEBUG") == '1':
+    api_path = "api/"
+
 db_file = "pesquisas.db"
 try:
     conn = sqlite3.connect(db_file)
@@ -54,7 +58,7 @@ def salva_resposta_inicio():
     if request.method == 'POST':
 
         file_name = request.form['nome'].lower().replace(' ', '')
-        dir_user = 'training/' + file_name
+        dir_user = api_path + 'training/' + file_name
         if not os.path.exists(dir_user) :
             os.mkdir(dir_user)
 
@@ -66,7 +70,7 @@ def salva_resposta_inicio():
             fh.write(threatPhoto(request))
 
         adicionar_pesquisa(file_name, f1_titulo, request)
-        adicionar_pessoa(request)
+        adicionar_pessoa(file_name)
         return {
             'success': True,
             'message': 'salva_resposta_inicio cadastradas'
@@ -95,16 +99,18 @@ def salva_resposta_fim():
 @app.route('/leitura_facial', methods=['POST'])
 def leitura_facial():
     id_imagem = request.form['user_photo']
-
     file_name = hashlib.md5(id_imagem.encode()).hexdigest()
-    # file_name = request.form['nome'].lower().replace(' ', '')
-    dir_user = 'match/' 
+    dir_user = api_path + 'match/' 
 
     f1_titulo = file_name + '.jpg'
     with open(dir_user + '/' + f1_titulo, "wb") as fh:
         fh.write(threatPhoto(request))
 
-    return recognize_face(file_name, model="hog")
+    nome = recognize_face(file_name, model="hog")
+    if (nome):
+        return {"usuario": nome}
+    
+    return False
 
 @app.route('/graficos', methods=['GET'])
 def graficos():
@@ -112,10 +118,9 @@ def graficos():
 
     return render_template('x_graficos.html', title='Resposta final', r=busca_grafico(), refresh=refresh)
 
-def adicionar_pessoa(request):
-    nome = request.form['nome']
+def adicionar_pessoa(file_name):
     return{
-        encode_new_face(nome, model="hog")
+        encode_new_face(file_name, model="hog")
     }
 
 def threatPhoto(request):
@@ -127,8 +132,8 @@ def busca_pesquisa(pesquisa):
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
 
-        sql = "SELECT * FROM pesquisas WHERE id = ?"
-        cursor.execute(sql, (pesquisa))
+        sql = "SELECT * FROM pesquisas WHERE dir_name = '"+pesquisa+"'"
+        cursor.execute(sql)
 
         return cursor.fetchone()
     except sqlite3.Error as e:

@@ -172,22 +172,13 @@
       
       const form_save = document.getElementById('formSave')
       const formData = new FormData(form_save);
-      fetch('/leitura_facial', {
-        method: "POST", 
-        body: formData,
-      })
-      .then(res => console.log(res.json()))
-      .then(data => {
-        console.log(data)
-        if (data != undefined) {
-          // window.location.href='{{ url_for("resposta_fim") }}?user=ascac'
+      leitura_facial(formData).then(result => {
+        if (result.usuario != '') {
+          window.location.href='{{ url_for("resposta_fim") }}?user=' + result.usuario
         } else {
           alert("Usuário desconhecido, tente novamente.")
-
         }
-      })
-      .catch(err => console.log(err))
-
+      });
       
     } else {
       clearphoto();
@@ -197,7 +188,15 @@
   window.addEventListener("load", startup, false);
 })();
 
-
+async function leitura_facial(formData) {
+  const response = await fetch('/leitura_facial', {
+    method: "POST", 
+    body: formData,
+  });
+  
+  const result = await response.json();
+  return result;
+}
 
   </script>
 </body>
