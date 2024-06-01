@@ -5,14 +5,14 @@ from pathlib import Path # Manipula caminhos de arquivos
 
 import face_recognition # Reconhece faces em imagens
 from PIL import Image, ImageDraw # Cria e edita imagens
-DEFAULT_ENCODINGS_PATH = Path("api/output/encodings.pkl")
+DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
 BOUNDING_BOX_COLOR = "blue"
 TEXT_COLOR = "white"
 
 # Create directories if they don't already exist
-Path("api/training").mkdir(exist_ok=True)
-Path("api/output").mkdir(exist_ok=True)
-Path("api/match").mkdir(exist_ok=True)
+Path("training").mkdir(exist_ok=True)
+Path("output").mkdir(exist_ok=True)
+Path("match").mkdir(exist_ok=True)
 
 
 def encode_new_face(
@@ -32,7 +32,7 @@ def encode_new_face(
     names = loaded_encodings["names"]
     encodings = loaded_encodings["encodings"]
 
-    for filepath in Path("api/training").glob(f"{name}/*"):
+    for filepath in Path("training").glob(f"{name}/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
         face_locations = face_recognition.face_locations(image, model=model)
@@ -57,7 +57,7 @@ def match_face(
     """
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
-    filepath = Path("api/match") / f"{image_id}.jpg"
+    filepath = Path("match") / f"{image_id}.jpg"
     input_image = face_recognition.load_image_file(filepath)
 
     input_face_locations = face_recognition.face_locations(
@@ -67,8 +67,8 @@ def match_face(
         input_image, input_face_locations
     )
 
-    pillow_image = Image.fromarray(input_image)
-    draw = ImageDraw.Draw(pillow_image)
+    #pillow_image = Image.fromarray(input_image)
+    #draw = ImageDraw.Draw(pillow_image)
 
     for bounding_box, unknown_encoding in zip(
         input_face_locations, input_face_encodings
@@ -83,8 +83,8 @@ def match_face(
             # _display_face(draw, bounding_box, name + "não é " + match_name)
             return False
 
-    del draw
-    pillow_image.show()
+    #del draw
+    #pillow_image.show()
 
 def recognize_face(
     image_id: str,
@@ -96,42 +96,8 @@ def recognize_face(
     """
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
-    filepath = Path("api/match") / f"{image_id}.jpg"
+    filepath = Path("match") / f"{image_id}.jpg"
     input_image = face_recognition.load_image_file(filepath)
-
-    input_face_locations = face_recognition.face_locations(
-        input_image, model=model
-    )
-    input_face_encodings = face_recognition.face_encodings(
-        input_image, input_face_locations
-    )
-
-    pillow_image = Image.fromarray(input_image)
-    draw = ImageDraw.Draw(pillow_image)
-
-    for unknown_encoding in zip(
-        input_face_locations, input_face_encodings
-    ):
-        name = _recognize_face(unknown_encoding, loaded_encodings)
-    os.remove(filepath)
-
-    del draw
-    pillow_image.show()
-    return name
-
-def recognize_faces(
-    image_location: str,
-    model: str = "hog",
-    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
-) -> None:
-    """
-    Given an unknown image, get the locations and encodings of any faces and
-    compares them against the known encodings to find potential matches.
-    """
-    with encodings_location.open(mode="rb") as f:
-        loaded_encodings = pickle.load(f)
-
-    input_image = face_recognition.load_image_file(image_location)
 
     input_face_locations = face_recognition.face_locations(
         input_image, model=model
@@ -149,11 +115,14 @@ def recognize_faces(
         name = _recognize_face(unknown_encoding, loaded_encodings)
         if not name:
             name = "Unknown"
-        _display_face(draw, bounding_box, name)
+        if not bounding_box:
+            _display_face(draw, bounding_box, name)
 
+    os.remove(filepath)
+    print(image_id," É a foto do " , name)
     del draw
     pillow_image.show()
-
+    return name
 
 def _recognize_face(unknown_encoding, loaded_encodings):
     """

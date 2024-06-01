@@ -54,7 +54,7 @@ def salva_resposta_inicio():
     if request.method == 'POST':
 
         file_name = request.form['nome'].lower().replace(' ', '')
-        dir_user = 'api/training/' + file_name
+        dir_user = 'training/' + file_name
         if not os.path.exists(dir_user) :
             os.mkdir(dir_user)
 
@@ -98,15 +98,13 @@ def leitura_facial():
 
     file_name = hashlib.md5(id_imagem.encode()).hexdigest()
     # file_name = request.form['nome'].lower().replace(' ', '')
-    dir_user = 'api/match/' 
+    dir_user = 'match/' 
 
     f1_titulo = file_name + '.jpg'
     with open(dir_user + '/' + f1_titulo, "wb") as fh:
         fh.write(threatPhoto(request))
 
-    return{
-        recognize_face(file_name, model="hog")
-    }
+    return recognize_face(file_name, model="hog")
 
 @app.route('/graficos', methods=['GET'])
 def graficos():
