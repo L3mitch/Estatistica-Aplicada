@@ -1,12 +1,10 @@
-import os 
+import os, base64, sqlite3, hashlib
+
 from flask import render_template, request, redirect
 from app import app
-import base64
-import sqlite3
-from detector import * # Isso precisa mudar, não está importando do local correto
+from detector import *
 
 db_file = "pesquisas.db"
-
 try:
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
