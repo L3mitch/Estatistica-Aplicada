@@ -70,26 +70,48 @@
           </div>
 
           <div class="step hidden">
+            <label for="empresa" class="block mb-1">Informe a Empresa ou Instituição que você representa</label>
+            <input type="empresa" id="empresa" name="empresa" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+          </div>
+
+          <div class="step hidden">
             <label for="q1_01" class="block mb-1" >Você conhece e sabe para que serve a ferramenta "Django" ?</label>
-            <select id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
+            <select id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
               <option value="S">Sim</option>
               <option value="N">Não</option>
             </select>
           </div>
 
           <div class="step hidden">
-            <label for="q1_02" class="block mb-1" >O que é e pra que serve uma API?</label>
-            <input type="q1_02" id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+            <label for="q1_02" class="block mb-1" >Você sabe o que é ou para que serve uma API?</label>
+            <select id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+              <option value="S">Sim</option>
+              <option value="N">Não</option>
+            </select>
           </div>
 
           <div class="step hidden">
-            <label for="q1_03" class="block mb-1">O que é um arquivo csv?</label>
-            <input type="q1_03" id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+            <label for="q1_03" class="block mb-1">Você sabe o que é um arquivo CSV?</label>
+            <select id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+              <option value="S">Sim</option>
+              <option value="N">Não</option>
+            </select>
           </div>
 
           <div class="step hidden">
-            <label for="q1_04" class="block mb-1">Qual a diferença entre Front-end e Back-end?</label>
-            <input type="q1_04" id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+            <label for="q1_04" class="block mb-1">Você sabe a diferença entre Front-End e Back-End?</label>
+            <select id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+              <option value="S">Sim</option>
+              <option value="N">Não</option>
+            </select>
+          </div>
+          
+          <div class="step hidden">
+            <label for="q1_05" class="block mb-1">Você já ouviu falar sobre Python e suas aplicações?</label>
+            <select id="q1_05" name="q1_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+              <option value="S">Sim</option>
+              <option value="N">Não</option>
+            </select>
           </div>
 
           <button type="button" id="avancar" class="w-1/2 mx-auto bg-blue-500 mt-12 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-all">
@@ -108,7 +130,7 @@
           Obrigado pela participação
         </h1>
 
-        <a href="?responder">Responder Novamente</a>
+        <a href="/">Voltar ao Menu</a>
       </div>
     </div>
     <script>

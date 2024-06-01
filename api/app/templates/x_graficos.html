@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Estatística Aplicada</title>
+  <style>
+    canvas {
+      border: 1px dotted red;
+    }
+
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 80vh;
+      width: 80vw;
+    }
+  </style>
+  {% if refresh == "1": %}
+  <meta http-equiv="refresh" content="15" >
+  {% endif %}
+</head>
+<body class="bg-gray-900 text-gray-200">
+  <div class="flex justify-center items-center h-screen">
+    <div id="formMessage" >
+      <h1 class="text-2xl font-bold mb-8 text-center">Resultados da Pesquisa</h1>
+      <h3>Total Respostas: {{ r[20] }}</h3>
+
+      <div class="chart-container">
+        <canvas id="chart"></canvas>
+      </div>
+    
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+  <script>
+var data = {
+  labels: ["Django", "API", "CSV", "Front e Back", "Python"],
+  datasets: [{
+    label: "Respopstas Início Sim",
+    backgroundColor: "rgb(0,250,154)",
+    data: [{{ r[0] }}, {{ r[1] }}, {{ r[2] }}, {{ r[3] }}, {{ r[4] }}],
+    stack: 'Stack 0',
+  },
+  {
+    label: "Respopstas Início Não",
+    backgroundColor: "rgb(250,128,114)",
+    data: [{{ r[5] }}, {{ r[6] }}, {{ r[7] }}, {{ r[8] }}, {{ r[9] }}],
+    stack: 'Stack 0',
+  },
+  {
+    label: "Respostas Fim Sim",
+    backgroundColor: "rgb(0,100,0)",
+    data: [{{ r[10] }}, {{ r[11] }}, {{ r[12] }}, {{ r[13] }}, {{ r[14] }}],
+    stack: 'Stack 1',
+  },
+  {
+    label: "Respostas Fim Não",
+    backgroundColor: "rgb(255,99,71)",
+    data: [{{ r[15] }}, {{ r[16] }}, {{ r[17] }}, {{ r[18] }}, {{ r[19] }}],
+    stack: 'Stack 1',
+  }]
+};
+
+var options = {
+  type: 'bar',
+  data: data,
+  options: {
+    plugins: {
+      title: {
+        display: false,
+      },
+    },
+    responsive: true,
+    interaction: {
+      intersect: false,
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+  }
+};
+
+new Chart('chart', {
+  type: 'bar',
+  options: options,
+  data: data
+});
+
+  </script>
+</body>
+</html>

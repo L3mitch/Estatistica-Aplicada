@@ -12,38 +12,55 @@
       <h1 class="text-2xl font-bold mb-8 text-center">Por favor, responda às questões abaixo para realizarmos a pesquisa</h1>
       <form id="formCadastro" method="post" action="{{ url_for('resposta_fim') }}" class="flex flex-col gap-y-4 justify-center" enctype="multipart/form-data">
         <div class="w-full flex flex-col bg-gray-700 rounded-lg p-3 mb-8 gap-y-2 justify-start">
-          <p>Olá, {{ u.name }}</p>
-          <p>Idade: {{ u.age }}</p>
-          <p>Email: {{ u.email }}</p>
-          <p>Sexo: {{ u.sex }}</p>
+          <p>Olá, {{ u[2] }}</p>
+          <p>Idade: {{ u[3] }}</p>
+          <p>Email: {{ u[4] }}</p>
+          <p>Sexo: {{ u[5] }}</p>
+          <p>Empresa: {{ u[7] }}</p>
+          <input type="hidden" name="id" value="{{ u[0] }}">
         </div>
 
         <div class="step">
-          <label for="q1_01" class="block mb-1" >Você conhece e sabe para que serve a ferramenta "Django" ?</label>
-          <select id="q1_01" name="q1_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
+          <label for="q2_01" class="block mb-1" >Você conhece e sabe para que serve a ferramenta "Django" ?</label>
+          <select id="q2_01" name="q2_01" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
             <option value="S">Sim</option>
             <option value="N">Não</option>
           </select>
         </div>
 
         <div class="step hidden">
-          <label for="q1_02" class="block mb-1" >O que é e pra que serve uma API?</label>
-          <input type="q1_02" id="q1_02" name="q1_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+          <label for="q2_02" class="block mb-1" >Você sabe o que é ou para que serve uma API?</label>
+          <select id="q2_02" name="q2_02" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
         </div>
 
         <div class="step hidden">
-          <label for="q1_03" class="block mb-1">O que é um arquivo csv?</label>
-          <input type="q1_03" id="q1_03" name="q1_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+          <label for="q2_03" class="block mb-1">Você sabe o que é um arquivo CSV?</label>
+          <select id="q2_03" name="q2_03" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
         </div>
 
         <div class="step hidden">
-          <label for="q1_04" class="block mb-1">Qual a diferença entre Front-end e Back-end?</label>
-          <input type="q1_04" id="q1_04" name="q1_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required/>
+          <label for="q2_04" class="block mb-1">Você sabe a diferença entre Front-End e Back-End?</label>
+          <select id="q2_04" name="q2_04" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+        
+        <div class="step hidden">
+          <label for="q2_05" class="block mb-1">Você já ouviu falar sobre Python e suas aplicações?</label>
+          <select id="q2_05" name="q2_05" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
+            <option value="S">Sim</option>
+            <option value="N">Não</option>
+          </select>
         </div>
 
         <button type="button" id="avancar" class="w-1/2 mx-auto bg-blue-500 hover:bg-blue-700 text-white mt-12 font-bold py-2 px-4 rounded-lg">Avançar</button>
-
-        <input type="hidden" name="dir_name" value="{{ u.dir_name }}">
         <button type="submit" id="enviar" class=" hidden w-full bg-green-500 hover:bg-green-700 text-white mt-12 font-bold py-2 px-4 rounded-lg">Enviar</button>
       </form>
     </div>
@@ -51,7 +68,7 @@
     <div id="formMessage" class="hidden">
       <h1 class="text-2xl font-bold mb-8 text-center">Obrigado pela participação</h1>
 
-      <a href="{{ url_for('resposta_fim') }}">Responder Novamente</a>
+      <a href="/">Voltar ao Menu</a>
     </div>
   </div>
 
