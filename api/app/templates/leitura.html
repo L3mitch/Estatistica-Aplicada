@@ -1,203 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <title>Estatística Aplicada</title>
-</head>
-<body class="bg-gray-900 text-gray-200">
-  <div class="flex justify-center items-center h-screen">
-    <div class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full" id="formItem">
-      <h1 class="text-2xl font-bold mb-8 text-center">Por favor, envie sua foto para identificar seu usuario</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Estatística Aplicada</title>
+  </head>
+  <body class="bg-gray-900 text-gray-200">
+    <div class="flex justify-center items-center h-screen">
+      <div
+        class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full"
+        id="formItem"
+      >
+        <h1 class="text-2xl font-bold mb-8 text-center">
+          Por favor, envie sua foto para identificar seu usuario
+        </h1>
 
-      <form action="" id="formSave">
-        <div class="contentarea">
-          <div class="camera">
-            <video id="video">Video stream not available.</video>
-            <button id="startbutton">Tirar Foto</button>
+        <form action="" id="formSave">
+          <div class="flex flex-col">
+            <div class="flex flex-col justify-center">
+              <video class="hidden" id="video">Video stream not available.</video>
+              <button class="bg-red-500 mx-auto px-10 py-3 rounded-lg transition-all hover:bg-red-700" id="startbutton">Tirar Foto</button>
+            </div>
+            <canvas id="canvas"> </canvas>
+            <input type="hidden" id="user_photo" name="user_photo" />
           </div>
-          <canvas id="canvas"> </canvas>
-          <input type="hidden" id="user_photo" name="user_photo">
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-  <style>
+    <style>
+      #canvas {
+        display: none;
+      }
 
-    #video {
-  border: 1px solid black;
-  box-shadow: 2px 2px 3px black;
-  width: 320px;
-  height: 240px;
-}
+      .output {
+        width: 340px;
+        display: inline-block;
+        vertical-align: top;
+      }
 
-#photo {
-  border: 1px solid black;
-  box-shadow: 2px 2px 3px black;
-  width: 320px;
-  height: 240px;
-}
+      .contentarea {
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+        font-family: "Lucida Grande", "Arial", sans-serif;
+        width: 760px;
+      }
+    </style>
 
-#canvas {
-  display: none;
-}
+    <script>
+      (() => {
+        const width = 1280;
+        let height = 0;
 
-.camera {
-  width: 340px;
-  display: inline-block;
-}
+        let streaming = false;
 
-.output {
-  width: 340px;
-  display: inline-block;
-  vertical-align: top;
-}
+        let video = null;
+        let canvas = null;
+        let user_photo = null;
+        let startbutton = null;
 
-#startbutton {
-  display: block;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  bottom: 32px;
-  background-color: rgb(0 150 0 / 50%);
-  border: 1px solid rgb(255 255 255 / 70%);
-  box-shadow: 0px 0px 1px 2px rgb(0 0 0 / 20%);
-  font-size: 14px;
-  font-family: "Lucida Grande", "Arial", sans-serif;
-  color: rgb(255 255 255 / 100%);
-}
-
-.contentarea {
-  font-size: 16px;
-  font-family: "Lucida Grande", "Arial", sans-serif;
-  width: 760px;
-}
-  </style>
-
-  <script>
-
-
-(() => {
-  const width = 1280;
-  let height = 0;
-
-  let streaming = false;
-
-  let video = null;
-  let canvas = null;
-  let user_photo = null;
-  let startbutton = null;
-
-  function showViewLiveResultButton() {
-    if (window.self !== window.top) {
-      document.querySelector(".contentarea").remove();
-      const button = document.createElement("button");
-      button.textContent = "View live result of the example code above";
-      document.body.append(button);
-      button.addEventListener("click", () => window.open(location.href));
-      return true;
-    }
-    return false;
-  }
-
-  function startup() {
-    if (showViewLiveResultButton()) {
-      return;
-    }
-    video = document.getElementById("video");
-    canvas = document.getElementById("canvas");
-    user_photo = document.getElementById("user_photo");
-    startbutton = document.getElementById("startbutton");
-
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
-      .then((stream) => {
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch((err) => {
-        console.error(`An error occurred: ${err}`);
-      });
-
-    video.addEventListener(
-      "canplay",
-      (ev) => {
-        if (!streaming) {
-          height = video.videoHeight / (video.videoWidth / width);
-
-          if (isNaN(height)) {
-            height = width / (4 / 3);
+        function showViewLiveResultButton() {
+          if (window.self !== window.top) {
+            document.querySelector(".contentarea").remove();
+            const button = document.createElement("button");
+            button.textContent = "View live result of the example code above";
+            document.body.append(button);
+            button.addEventListener("click", () => window.open(location.href));
+            return true;
           }
-
-          video.setAttribute("width", width);
-          video.setAttribute("height", height);
-          canvas.setAttribute("width", width);
-          canvas.setAttribute("height", height);
-          streaming = true;
+          return false;
         }
-      },
-      false,
-    );
 
-    startbutton.addEventListener(
-      "click",
-      (ev) => {
-        takepicture();
-        ev.preventDefault();
-      },
-      false,
-    );
+        function loadCamera() {
+          Swal.fire({
+            title: "Tirar Foto",
+            html: '<video id="video" class="w-full rounded-lg" autoplay></video>',
+            showCancelButton: true,
+            confirmButtonText: "Tirar",
+            cancelButtonText: "Cancelar",
+            willOpen: () => {
+              const videoElement =
+                Swal.getHtmlContainer().querySelector("#video");
+              navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false })
+                .then((stream) => {
+                  videoElement.srcObject = stream;
+                  videoElement.play();
+                })
+                .catch((err) => {
+                  console.error(`An error occurred: ${err}`);
+                });
 
-    clearphoto();
-  }
+              video.addEventListener(
+                "canplay",
+                (ev) => {
+                  if (!streaming) {
+                    height = video.videoHeight / (video.videoWidth / width);
 
-  function clearphoto() {
-    const context = canvas.getContext("2d");
-    context.fillStyle = "#AAA";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+                    if (isNaN(height)) {
+                      height = width / (4 / 3);
+                    }
 
-    const data = canvas.toDataURL("image/png");
-  }
-
-  function takepicture() {
-    const context = canvas.getContext("2d");
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
-
-      const data = canvas.toDataURL("image/png");
-      user_photo.value = data;
-      
-      const form_save = document.getElementById('formSave')
-      const formData = new FormData(form_save);
-      leitura_facial(formData).then(result => {
-        if (result.usuario != '') {
-          window.location.href='{{ url_for("resposta_fim") }}?user=' + result.usuario
-        } else {
-          alert("Usuário desconhecido, tente novamente.")
+                    video.setAttribute("width", width);
+                    video.setAttribute("height", height);
+                    canvas.setAttribute("width", width);
+                    canvas.setAttribute("height", height);
+                    streaming = true;
+                  }
+                },
+                false
+              );
+            },
+            preConfirm: () => {
+              takepicture();
+            },
+          });
         }
-      });
-      
-    } else {
-      clearphoto();
-    }
-  }
 
-  window.addEventListener("load", startup, false);
-})();
+        function startup() {
+          if (showViewLiveResultButton()) {
+            return;
+          }
+          video = document.getElementById("video");
+          canvas = document.getElementById("canvas");
+          user_photo = document.getElementById("user_photo");
+          startbutton = document.getElementById("startbutton");
 
-async function leitura_facial(formData) {
-  const response = await fetch('/leitura_facial', {
-    method: "POST", 
-    body: formData,
-  });
-  
-  const result = await response.json();
-  return result;
-}
+          startbutton.addEventListener(
+            "click",
+            (ev) => {
+              ev.preventDefault();
+              loadCamera();
+            },
+            false
+          );
 
-  </script>
-</body>
+          clearphoto();
+        }
+
+        function clearphoto() {
+          const context = canvas.getContext("2d");
+          context.fillStyle = "#AAA";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+
+          const data = canvas.toDataURL("image/png");
+        }
+
+        function takepicture() {
+          const videoElement = Swal.getHtmlContainer().querySelector("#video");
+          const width = videoElement.videoWidth;
+          const height = videoElement.videoHeight;
+          const context = canvas.getContext("2d");
+          if (width && height) {
+            canvas.width = width;
+            canvas.height = height;
+            context.drawImage(video, 0, 0, width, height);
+
+            const data = canvas.toDataURL("image/png");
+            user_photo.value = data;
+
+            const form_save = document.getElementById("formSave");
+            const formData = new FormData(form_save);
+            leitura_facial(formData).then((result) => {
+              if (result.usuario != "") {
+                window.location.href =
+                  '{{ url_for("resposta_fim") }}?user=' + result.usuario;
+              } else {
+                alert("Usuário desconhecido, tente novamente.");
+              }
+            });
+          } else {
+            clearphoto();
+          }
+        }
+
+        window.addEventListener("load", startup, false);
+      })();
+
+      async function leitura_facial(formData) {
+        const response = await fetch("/leitura_facial", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+        return result;
+      }
+    </script>
+  </body>
 </html>
