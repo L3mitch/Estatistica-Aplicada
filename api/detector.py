@@ -126,7 +126,7 @@ def recognize_face(
     os.remove(filepath)
     print(image_id," É a foto do " , name)
     del draw
-    pillow_image.show()
+    # pillow_image.show()
     return name
 
 def _recognize_face(unknown_encoding, loaded_encodings):
