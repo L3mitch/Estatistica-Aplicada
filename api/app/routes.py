@@ -53,6 +53,11 @@ def resposta_inicio():
 def leitura():
     return render_template('leitura.html', title='Leitura Facial')
 
+@app.route('/qrcode', methods=['GET'])
+def qrcode():
+    usuarios = buscar_pessoas()
+    return render_template('qrcode.html', title='Leitura Facial', usuarios=usuarios)
+
 @app.route('/resposta_inicio', methods=['POST'])
 def salva_resposta_inicio():
     if request.method == 'POST':
@@ -172,6 +177,20 @@ def busca_grafico():
         return cursor.fetchone()
     except sqlite3.Error as e:
         print(f"Error: {e}")
+
+
+def buscar_pessoas():
+    try:
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+
+        sql = """SELECT dir_name, name FROM pesquisas  where q2_01=' ' order by name"""
+        cursor.execute(sql)
+
+        return cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Error: {e}")
+
 
 def adicionar_pesquisa(file_name, f1_titulo, request):
     try:

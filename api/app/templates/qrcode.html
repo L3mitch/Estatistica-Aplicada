@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Estatística Aplicada</title>
+  </head>
+  <body class="bg-gray-900 text-gray-200">
+    <div class="flex justify-center items-center h-screen">
+      <div
+        class="bg-gray-800 rounded-lg shadow-lg p-8 max-w-lg w-full"
+        id="formItem"
+      >
+        <h1 class="text-2xl font-bold mb-8 text-center">
+          Por favor, selecione seu nome abaixo
+        </h1>
+          <div class="step">
+            <label for="nome_pessoa" class="block mb-1">Qual o seu nome?</label>
+            <select id="nome_pessoa" name="nome_pessoa" class="w-full bg-gray-700 text-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required >
+              {%for pessoa in usuarios %}  
+                  <option value="{{ pessoa[0] }}">{{ pessoa[1] }}</option>
+              {%endfor%} 
+              
+            </select>
+          </div>
+
+          <button type="button" id="avancar" class="w-1/2 mx-auto bg-blue-500 mt-12 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-all">
+            Avançar
+          </button>
+
+      </div>
+
+
+    </div>
+    <script>
+  const btn_avanca = document.querySelector('#avancar');
+
+      btn_avanca.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        let usuario = document.querySelector("#nome_pessoa").value
+        window.location.href='{{ url_for("resposta_fim") }}?user=' + usuario
+      });
+
+    </script>
+  </body>
+</html>
